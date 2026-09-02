@@ -1,1 +1,91 @@
-@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Inter:wght@300;400;500;600;700&display=swap');
+   @import "tailwindcss";
+:root {
+  --bg: #faf9f7;
+  --surface: #ffffff;
+  --border: #e5e5e5;
+  --accent: #ef4d23;
+  --text: #111111;
+  --muted: #6b7280;
+}
+
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.serif-em {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+}
+
+.soft-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 1rem;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.05);
+  transition: box-shadow 0.25s, border-color 0.25s;
+}
+.soft-card:hover {
+  box-shadow: 0 6px 28px rgba(0,0,0,0.09);
+  border-color: #d1d1d1;
+}
+
+.tag {
+  font-size: 0.68rem;
+  padding: 2px 10px;
+  border-radius: 999px;
+  border: 1px solid #e0e0e0;
+  color: #6b7280;
+  background: #f5f5f4;
+  white-space: nowrap;
+}
+
+.section-label {
+  font-size: 0.68rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #111111;
+  color: #ffffff;
+  font-size: 0.875rem;
+  font-weight: 600;
+  padding: 0.625rem 1.375rem;
+  border-radius: 999px;
+  transition: background 0.2s, box-shadow 0.2s;
+}
+.btn-primary:hover {
+  background: #222222;
+  box-shadow: 0 4px 18px rgba(0,0,0,0.18);
+}
+
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #ffffff;
+  color: #111111;
+  font-size: 0.875rem;
+  font-weight: 500;
+  padding: 0.625rem 1.375rem;
+  border-radius: 999px;
+  border: 1px solid #d4d4d4;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.btn-secondary:hover {
+  border-color: #aaaaaa;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.07);
+}

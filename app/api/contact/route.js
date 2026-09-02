@@ -1,6 +1,12 @@
 import { Resend } from "resend";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+export const dynamic = "force-dynamic";
+
+let resend;
+function getResend() {
+  if (!resend) resend = new Resend(process.env.RESEND_API_KEY);
+  return resend;
+}
 
 export async function POST(req) {
   try {
@@ -10,7 +16,7 @@ export async function POST(req) {
       return Response.json({ error: "All fields are required." }, { status: 400 });
     }
 
-    await resend.emails.send({
+    await getResend().emails.send({
       from: "Portfolio Contact <onboarding@resend.dev>",
       to: "haeldick@gmail.com",
       subject: `New message from ${name}`,
