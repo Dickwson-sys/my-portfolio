@@ -1,63 +1,83 @@
 "use client";
-import { useState } from "react";
+import { useForm, ValidationError } from "@formspree/react";
 
 export default function ContactForm() {
-  const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [status, setStatus] = useState("idle");
-
-  const handleChange = (e) => setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
-
-  const handleSubmit = async () => {
-    if (!form.name || !form.email || !form.message) return;
-    setStatus("loading");
-    try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
-      });
-      if (res.ok) { setStatus("success"); setForm({ name: "", email: "", message: "" }); }
-      else setStatus("error");
-    } catch { setStatus("error"); }
-  };
+  const [state, handleSubmit] = useForm("mppzrlob");
 
   const inputClass =
     "w-full bg-white border border-[#e5e5e5] rounded-xl px-4 py-3 text-[#111] placeholder-[#bbb] text-sm focus:outline-none focus:border-[#ef4d23] transition-colors duration-200";
 
+  if (state.succeeded) {
+    return (
+      <div className="soft-card p-6 flex flex-col items-center justify-center gap-3 min-h-[260px] text-center">
+        <span className="text-3xl">✓</span>
+        <p className="font-semibold text-[#111]">Message sent!</p>
+        <p className="text-sm text-[#777]">
+          Thanks for reaching out — I&apos;ll get back to you soon.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="soft-card p-6 space-y-4">
+    <form onSubmit={handleSubmit} className="soft-card p-6 space-y-4">
       <div>
-        <label className="text-xs font-medium text-[#555] block mb-1.5">Name</label>
-        <input type="text" name="name" value={form.name} onChange={handleChange} placeholder="Your name" className={inputClass} />
+        <label htmlFor="name" className="text-xs font-medium text-[#555] block mb-1.5">
+          Name
+        </label>
+        <input
+          id="name"
+          type="text"
+          name="name"
+          placeholder="Your name"
+          required
+          className={inputClass}
+        />
+        <ValidationError prefix="Name" field="name" errors={state.errors}
+          className="text-red-500 text-xs mt-1" />
       </div>
+
       <div>
-        <label className="text-xs font-medium text-[#555] block mb-1.5">Email</label>
-        <input type="email" name="email" value={form.email} onChange={handleChange} placeholder="you@email.com" className={inputClass} />
+        <label htmlFor="email" className="text-xs font-medium text-[#555] block mb-1.5">
+          Email
+        </label>
+        <input
+          id="email"
+          type="email"
+          name="email"
+          placeholder="you@email.com"
+          required
+          className={inputClass}
+        />
+        <ValidationError prefix="Email" field="email" errors={state.errors}
+          className="text-red-500 text-xs mt-1" />
       </div>
+
       <div>
-        <label className="text-xs font-medium text-[#555] block mb-1.5">Message</label>
-        <textarea name="message" rows={4} value={form.message} onChange={handleChange} placeholder="Say hello..." className={`${inputClass} resize-none`} />
+        <label htmlFor="message" className="text-xs font-medium text-[#555] block mb-1.5">
+          Message
+        </label>
+        <textarea
+          id="message"
+          name="message"
+          rows={4}
+          placeholder="Say hello..."
+          required
+          className={`${inputClass} resize-none`}
+        />
+        <ValidationError prefix="Message" field="message" errors={state.errors}
+          className="text-red-500 text-xs mt-1" />
       </div>
 
       <button
-        onClick={handleSubmit}
-        disabled={status === "loading"}
+        type="submit"
+        disabled={state.submitting}
         className="w-full btn-primary justify-center disabled:opacity-50 disabled:cursor-not-allowed"
-        style={{ background: "#111" }}
       >
-        {status === "loading" ? "Sending…" : "Send Message →"}
+        {state.submitting ? "Sending…" : "Send Message →"}
       </button>
 
-      {status === "success" && (
-        <p className="text-sm text-center font-medium" style={{ color: "var(--accent)" }}>
-          ✓ Message sent! I&apos;ll get back to you soon.
-        </p>
-      )}
-      {status === "error" && (
-        <p className="text-red-500 text-sm text-center">
-          Something went wrong. Email me at haeldick@gmail.com
-        </p>
-      )}
-    </div>
+      <ValidationError errors={state.errors} className="text-red-500 text-xs text-center" />
+    </form>
   );
 }
